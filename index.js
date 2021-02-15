@@ -24,9 +24,14 @@ Use getFinals to do the following:
 hint - you should be looking at the stage key inside of the objects
 */
 
-function getFinals(/* code here */) {
-   /* code here */
+function getFinals(dataArray) {
+    /* code here */
+    let finalsTeams = dataArray.filter(teams => teams.Stage === "Final");
+    //console.log(finalsTeams);
+    return finalsTeams;
 }
+
+//console.log(getFinals(fifaData));
 
 
 
@@ -36,8 +41,9 @@ Use the higher-order function called getYears to do the following:
 2. Receive a callback function getFinals from task 2 
 3. Return an array called years containing all of the years in the getFinals data set*/
 
-function getYears(/* code here */) {
-    /* code here */
+function getYears(dataArray, callback) {
+/* code here */
+    return callback(dataArray).map(finalYear => finalYear.Year);
 }
 
 
@@ -49,8 +55,17 @@ Use the higher-order function getWinners to do the following:
 3. Determines the winner (home or away) of each `finals` game. 
 4. Returns the names of all winning countries in an array called `winners` */ 
 
-function getWinners(/* code here */) {
-    /* code here */
+function getWinners(dataArray, callback) {
+/* code here */
+    let winners = callback(dataArray).map(game => {
+        if (game["Home Team Goals"] > game["Away Team Goals"]) {
+            return game["Home Team Name"];
+        }
+        else {
+            return game["Away Team Name"];
+        }
+    });
+    return winners;
 }
 
 
@@ -65,8 +80,15 @@ Use the higher-order function getWinnersByYear to do the following:
 hint: the strings returned need to exactly match the string in step 4.
  */
 
-function getWinnersByYear(/* code here */) {
-    /* code here */
+function getWinnersByYear(dataArray, cbYears, cbWinners) {
+/* code here */
+    let stringArray = [];
+    let arrayYears = cbYears(dataArray);
+    let arrayWinners = cbWinners(dataArray);
+    for (let i = 0; i < arrayYears.length; i++){
+        stringArray.push(`In ${arrayYears[i]}, ${arrayWinners[i]} won the world cup!`);
+    }
+    return stringArray;
 }
 
 
@@ -81,8 +103,14 @@ Use the higher order function getAverageGoals to do the following:
  Example of invocation: getAverageGoals(getFinals(fifaData));
 */
 
-function getAverageGoals(/* code here */) {
-   /* code here */
+function getAverageGoals(callback) {
+/* code here */
+    let totalGoals = callback.reduce((total, score) => {
+        return total + (parseInt(score["Home Team Goals"]) + parseInt(score["Away Team Goals"]))
+    },0);
+    console.log(totalGoals);
+    return (totalGoals / callback.length).toFixed(2);
+
 }
 
 
